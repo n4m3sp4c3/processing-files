@@ -8,10 +8,11 @@ void setup(){
   background(255);
 }
 void draw(){
+  line(X,Y,500,500);
 }
   void mousePressed(){
   fill(r,g,b);
- rect (mouseX, mouseY, 20, 20);
+  rect (mouseX, mouseY, 20, 20);
   ellipse(mouseX,mouseY,100,50); 
  
   
