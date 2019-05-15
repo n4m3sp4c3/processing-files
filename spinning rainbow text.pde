@@ -12,10 +12,10 @@ void setup() {
 
 void draw() { 
   background(255);
-  fill(color(full, 255, 255));
-  full++;
-  if (full > 255) {
-    full = 0;
+  fill(color(colorfull, 255, 255));
+  colorfull++;
+  if (colorfull > 255) {
+    colorfull = 0;
   }
   textFont(f);                  
   translate(width/2,height/2);  
