@@ -24,3 +24,4 @@ void draw() {
   text(message,0,0);   
   theta += 0.05;                
 }//https://www.reddit.com/r/processing/comments/9gr5pb/question_how_to_create_rainbow_color_cycle_in/
+//https://processing.org/tutorials/p3d/
