@@ -1,13 +1,18 @@
-color randcolor = color(random(0,255),random(0,255),random(0,255));
+float colorfull;
 
 void setup(){
   size(600,600);
   frameRate(60);
+  colorMode(HSB);
+  noStroke();
   background(255);
 }
 void draw(){
-  randcolor = color(random(0,255),random(0,255),random(0,255));
-  fill(randcolor);
+  fill(color(colorfull, 255, 255));
+  colorfull++;
+  if (colorfull > 255) {
+    colorfull = 0;
+  }
   rect (mouseX, mouseY, 20, 20); 
 }
 void keyPressed(){
