@@ -1,10 +1,17 @@
-int startx = 400;
-int starty = 300;
+int borderx = 30000;
+int bordery = 30000;
+int virtualx = borderx/2;
+int virtualy = bordery/2;
+int scrollareax = width/4;
+int scrollareay = height/4;
+int startx = width/2;
+int starty = height/2;
 int xDirection;
 int yDirection;
 int movexy;
 int mass = 40;
-int speed = 6;
+int lastmass;
+int speed = 4;
 int counter = 0;
 
 void setup() {
@@ -13,37 +20,66 @@ void setup() {
 }
 
 void draw() {
+  lastmass = mass;
   adjustSpeed();
   checkExitCases();
-  windowIsBorder();
-  //checkIfInputToSplitCircle();
+  windowIsBorder();//check if still true
   //kbMovement();
   mouseMovement();
+  scrollCoordinates();
+  forceVirtualSystemToBePositive();
+}
+
+void forceVirtualSystemToBePositive(){
+  if(virtualx <= 0){
+    virtualx = 0;
+  }
+  if(virtualy <= 0){
+    virtualy = 0;
+  }
+  if(virtualx >= borderx){
+    virtualx = borderx;
+  }
+  if(virtualy >= bordery){
+    virtualy = bordery;
+  }
+  println(virtualx,"  ",virtualy,"  ",millis());
+  
+}
+
+void scrollCoordinates(){
+  if(startx >= width - scrollareax){
+    virtualx = virtualx + startx;
+  }
+  if(startx <= scrollareax){
+    virtualx = virtualx - startx;
+  }
+  if(starty >= width - scrollareay){
+    virtualy = virtualy + starty;
+  }
+  if(starty <= scrollareay){
+    virtualy = virtualy - starty;
+  }
 }
 
 void mouseMovement(){
   xDirection = startx - mouseX;
   yDirection = starty - mouseY;
-  movexy = xDirection + startx + yDirection + starty;//work on here next
-  startx = movexy/2;
-  starty = movexy/2;
-  background(255);
-  ellipse(startx,starty,mass,mass);
-  /*if(xDirection > 0){
+  if(xDirection > 0){
     background(255);
-    ellipse(startx = startx - speed,starty,mass,mass);
+    ellipse(startx = startx - speed * 2,starty,mass,mass);
   }
   if(xDirection < 0){
     background(255);
-    ellipse(startx = startx + speed,starty,mass,mass);
+    ellipse(startx = startx + speed * 2,starty,mass,mass);
   }
   if(yDirection > 0){
     background(255);
-    ellipse(startx,starty = starty - speed,mass,mass);
+    ellipse(startx,starty = starty - speed * 2,mass,mass);
   }
   if(yDirection < 0){
     background(255);
-    ellipse(startx,starty = starty + speed,mass,mass);
+    ellipse(startx,starty = starty + speed * 2,mass,mass);
   }
   if(xDirection < 0 && yDirection < 0){
     background(255);
@@ -52,7 +88,7 @@ void mouseMovement(){
   if(xDirection > 0 && yDirection > 0){
     background(255);
     ellipse(startx = startx - speed,starty = starty - speed,mass,mass);
-  }*/
+  }
 }
 
 void kbMovement() {//integrate switch statement and ask if the user wants to move with mouse or keyboard
@@ -80,18 +116,6 @@ void kbMovement() {//integrate switch statement and ask if the user wants to mov
 
 
 }
-
-
-/*void checkIfInputToSplitCircle() {//fix this
-  if(keyCode == SHIFT){//split
-    for (counter = 0; counter < 1; counter = counter+1) {
-      background(255);
-      mass = mass/2;
-      ellipse(startx - 50,starty - 50,mass,mass);
-      ellipse(startx + 50,starty + 50,mass,mass);
-    }
-}
-}*/
   
 void windowIsBorder() {
   if(startx > width){
@@ -121,7 +145,7 @@ void checkExitCases() {
   }
 }
 
-/*void adjustSpeed() {
+void adjustSpeed() {
   if(keyCode == SHIFT){
     mass = mass - 1;
     speed = speed + 10;
@@ -131,7 +155,7 @@ void checkExitCases() {
   }
   if(mass > lastmass){
     speed = speed - 1;
-  }*/
+  }
   
 }
 //https://processing.org/tutorials/objects/
