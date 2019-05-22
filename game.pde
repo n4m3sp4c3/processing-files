@@ -173,7 +173,7 @@ void adjustSpeed(){//integrate into new OOP system
   
 }
 /*
-https://www.youtube.com/watch?v=XCu7JSkgl04                   New file for creating a class?
+https://youtu.be/XwfOVFelLoo?list=PLRqwX-V7Uu6bb7z2IJaTlzwzIg_5yvL4i&t=318                   New file for creating a class?
 https://processing.org/examples/objects.html
 https://processing.org/tutorials/objects/
 https://forum.processing.org/one/topic/taking-user-input.html
