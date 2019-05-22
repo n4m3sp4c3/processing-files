@@ -1,3 +1,6 @@
+color red = color(255, 0, 0);
+color green = color(0, 255, 0);
+color blue = color(0, 0, 255);
 int borderx = 30000;
 int bordery = 30000;
 int virtualx = borderx/2;
@@ -13,21 +16,93 @@ int mass = 40;
 int lastmass;
 int speed = 4;
 int counter = 0;
+float foodx;
+float foody;
+
+public class PositiveOnlyCoordinateSystem{
+  float x;
+  float y;
+  float borderx;
+  float bordery;
+  
+  void minMaxCheck(){
+    if(x <= 0){
+      x = 0;
+    }
+    if(y <= 0){
+      y = 0;
+    }
+    if(x >= borderx){
+      x = borderx;
+    }
+    if(y >= bordery){
+      y = bordery;
+    }
+  }
+}
+
+public class Grid{
+  int size;
+  
+  void display(){
+  for (int i = 0; i < height; i = i+size) {
+    line(0, i, height, i);
+    line(i, 0, i, width);
+  }
+}
+}
+
+public class Circle{
+  color c;
+  float x;
+  float y;
+  float diameter;
+  
+  void display(){
+    background(255);
+    fill(c);
+    ellipse(x,y,diameter,diameter);
+  }
+}
+
+public class playerCircle extends Circle{
+  int speed;
+}
+
+public class edibleCircle extends Circle{
+  
+}
+
 
 void setup() {
   size(800, 600);
   frameRate(30);
+  background(255);
+  Grid bgGrid = new Grid();
+  bgGrid.size = 20;
+  playerCircle player1 = new playerCircle();
+  player1.c = red;
+  player1.x = width/2;
+  player1.y = height/2;
+  player1.diameter = 40;
+  player1.speed = 4;
+  //edibleCircle circle1,2,3,4,5,6... = new edibleCircle();
 }
 
 void draw() {
   lastmass = mass;
+  Grid.display();
+  makePlayerCircle();
+  spawnFood();
   adjustSpeed();
   checkExitCases();
-  windowIsBorder();//check if still true
-  //kbMovement();
   mouseMovement();
-  scrollCoordinates();
   forceVirtualSystemToBePositive();
+}
+
+void makePlayerCircle(){
+  fill(blue);
+  ellipse(width/2,height/2,mass,mass);
 }
 
 void forceVirtualSystemToBePositive(){
@@ -43,94 +118,33 @@ void forceVirtualSystemToBePositive(){
   if(virtualy >= bordery){
     virtualy = bordery;
   }
-  println(virtualx,"  ",virtualy,"  ",millis());
   
 }
 
-void scrollCoordinates(){
-  if(startx >= width - scrollareax){
-    virtualx = virtualx + startx;
-  }
-  if(startx <= scrollareax){
-    virtualx = virtualx - startx;
-  }
-  if(starty >= width - scrollareay){
-    virtualy = virtualy + starty;
-  }
-  if(starty <= scrollareay){
-    virtualy = virtualy - starty;
-  }
+void mouseMovement(){//integrate into new OOP system
+    xDirection = width/2 - mouseX;
+    yDirection = height/2 - mouseY;
+    if(xDirection >= 100){
+      virtualx = virtualx + speed;
+    }else if(xDirection <= -100){
+      virtualx = virtualx - speed;
+    }
+    if(yDirection >= 100){
+      virtualy = virtualy + speed;
+    }else if(yDirection <= -100){
+      virtualy = virtualy - speed;
+    }
+    println(virtualx,"  ",virtualy,"  ",xDirection,"  ",yDirection);
 }
 
-void mouseMovement(){
-  xDirection = startx - mouseX;
-  yDirection = starty - mouseY;
-  if(xDirection > 0){
-    background(255);
-    ellipse(startx = startx - speed * 2,starty,mass,mass);
-  }
-  if(xDirection < 0){
-    background(255);
-    ellipse(startx = startx + speed * 2,starty,mass,mass);
-  }
-  if(yDirection > 0){
-    background(255);
-    ellipse(startx,starty = starty - speed * 2,mass,mass);
-  }
-  if(yDirection < 0){
-    background(255);
-    ellipse(startx,starty = starty + speed * 2,mass,mass);
-  }
-  if(xDirection < 0 && yDirection < 0){
-    background(255);
-    ellipse(startx = startx + speed,starty = starty + speed,mass,mass);
-  }
-  if(xDirection > 0 && yDirection > 0){
-    background(255);
-    ellipse(startx = startx - speed,starty = starty - speed,mass,mass);
-  }
+void spawnFood(){//integrate into new OOP system
+  foodx = random(virtualx - 800,virtualx + 800);
+  foody = random(virtualy - 600,virtualy + 600);
+  fill(random(0,255),random(0,255),random(0,255));
+  ellipse(foodx,foody,20,20);
 }
 
-void kbMovement() {//integrate switch statement and ask if the user wants to move with mouse or keyboard
-  
-  if(keyCode == 'W'){
-    background(255);
-    ellipse(startx,starty = starty - speed,mass,mass);
-}
-  if(keyCode == 'S'){
-    background(255);
-    ellipse(startx,starty = starty + speed,mass,mass);
-}
-  if(keyCode == 'A'){
-    background(255);
-    ellipse(startx = startx - speed,starty,mass,mass);
-}
-  if(keyCode == 'D'){
-    background(255);
-    ellipse(startx = startx + speed,starty,mass,mass);
-}
-  if(keyCode == 'W' && keyCode == 'D'){
-    background(255);
-    ellipse(startx = startx + speed,starty = starty + speed,mass,mass);
-  }
-
-
-}
-  
-void windowIsBorder() {
-  if(startx > width){
-    startx = width;
-  }else if(startx < 0){
-    startx = 0;
-  }
-  if(starty > height){
-    starty = height;
-  }else if(starty < 0){
-    starty = 0;
-  }
-}
-
-void checkExitCases() {
+void checkExitCases(){//integrate into new OOP system
   if(keyCode == ESC){
     println("ESCAPE");
     exit();
@@ -145,7 +159,7 @@ void checkExitCases() {
   }
 }
 
-void adjustSpeed() {
+void adjustSpeed(){//integrate into new OOP system
   if(keyCode == SHIFT){
     mass = mass - 1;
     speed = speed + 10;
@@ -158,5 +172,11 @@ void adjustSpeed() {
   }
   
 }
-//https://processing.org/tutorials/objects/
-//https://forum.processing.org/one/topic/taking-user-input.html
+/*
+https://www.youtube.com/watch?v=XCu7JSkgl04                   New file for creating a class?
+https://processing.org/examples/objects.html
+https://processing.org/tutorials/objects/
+https://forum.processing.org/one/topic/taking-user-input.html
+https://processing.org/reference/line_.html
+https://www.geeksforgeeks.org/new-operator-java/
+*/
