@@ -2,7 +2,7 @@ float colorfull;
 
 void setup(){
   size(600,600);
-  frameRate(60);
+  frameRate(256);
   colorMode(HSB);
   noStroke();
   background(255);
